@@ -19,13 +19,13 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
     if(req.query.image_url){
       const image_url = req.query.image_url;
-      const filtered_image = await filterImageFromURL(image_url);
-      res.sendFile(filtered_image, () => {
-        deleteLocalFiles([filtered_image]);
-      });
-    }
-
-  })
+      // const filtered_image = await filterImageFromURL(image_url);
+      await filterImageFromURL(image_url)
+          .then(async (filtered_image) => res.status(200).sendFile(filtered_image, () => deleteLocalFiles([filtered_image])))
+          .catch((error) =>  res.status(400).send("Ops! We didn't get that one for you. Try again!"));
+      }
+  });
+  
   // endpoint to filter an image from a public url.
   // IT SHOULD
   //    1
