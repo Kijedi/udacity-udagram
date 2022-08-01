@@ -1,6 +1,7 @@
-import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import express, { Request, Response } from "express";
+
 
 (async () => {
 
@@ -15,13 +16,12 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
-  app.get('/filteredimage', async (req, res) => {
-
+  app.get('/filteredimage', async (req: Request, res: Response) => {
     if(req.query.image_url){
-      const image_url = req.query.image_url;
+      const image_url :string = req.query.image_url;
       // const filtered_image = await filterImageFromURL(image_url);
       await filterImageFromURL(image_url)
-          .then(async (filtered_image) => res.status(200).sendFile(filtered_image, () => deleteLocalFiles([filtered_image])))
+          .then(async (filtered_image) =>  res.status(200).sendFile(filtered_image, () => deleteLocalFiles([filtered_image])))
           .catch((error) =>  res.status(400).send("Ops! We didn't get that one for you. Try again!"));
       }
   });
